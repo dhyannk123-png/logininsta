@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Zyrx Demo Form</title>
+<style>
+  body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045);
+    font-family: Arial, sans-serif;
+    color: white;
+  }
+
+  .card {
+    background: #222;
+    padding: 30px;
+    border-radius: 12px;
+    width: 320px;
+    text-align: center;
+  }
+
+  .card h2 {
+    margin-bottom: 20px;
+  }
+
+  input, button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 6px;
+    border: none;
+    font-size: 16px;
+  }
+
+  button {
+    background: #00aaff;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+  }
+
+  #msg {
+    margin-top: 15px;
+    color: yellow;
+    font-weight: bold;
+    min-height: 24px;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <h2>Zyrx Demo Form</h2>
+  <input type="text" id="name" placeholder="Enter Name">
+  <input type="tel" id="mobile" placeholder="Enter Mobile No">
+  <button id="submitBtn">Submit</button>
+  <div id="msg"></div>
+</div>
+
+<!-- Firebase CDN -->
+<script src="https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js"></script>
+<script>
+  // 🔹 Firebase config
+  const firebaseConfig = {
+    apiKey: "AIzaSyBisqR3m4trFx-and45aUP3Z01UHF4ZNCk",
+    authDomain: "zyrx-f5937.firebaseapp.com",
+    projectId: "zyrx-f5937",
+    storageBucket: "zyrx-f5937.firebasestorage.app",
+    messagingSenderId: "849122075018",
+    appId: "1:849122075018:web:b6b4d0a2c4915b25d76873",
+    measurementId: "G-KWFZGKP7HD"
+  };
+
+  // Initialize Firebase
+  const app = firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+
+  const msgDiv = document.getElementById("msg");
+  const nameInput = document.getElementById("name");
+  const mobileInput = document.getElementById("mobile");
+  const submitBtn = document.getElementById("submitBtn");
+
+  submitBtn.addEventListener("click", async () => {
+    const name = nameInput.value.trim();
+    const mobile = mobileInput.value.trim();
+
+    if (!name || !mobile) {
+      msgDiv.textContent = "Fill all fields!";
+      return;
+    }
+
+    try {
+      await db.collection("users").add({
+        name,
+        mobile,
+        time: firebase.firestore.FieldValue.serverTimestamp()
+      });
+      msgDiv.textContent = "Data saved online ✅"; // ✅ Yellow message
+      nameInput.value = "";
+      mobileInput.value = "";
+    } catch (error) {
+      console.error(error);
+      msgDiv.textContent = "Error saving data ❌";
+    }
+  });
+</script>
+
+</body>
+</html>
