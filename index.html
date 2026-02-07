@@ -1,36 +1,118 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>JS Test</title>
-  <style>
-    body {
-      background: black;
-      color: white;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      flex-direction: column;
-    }
-    #msg {
-      color: yellow;
-      font-size: 20px;
-      margin-top: 10px;
-    }
-  </style>
+<meta charset="UTF-8">
+<title>Zyrx Demo Form</title>
+
+<style>
+  body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045);
+    font-family: Arial, sans-serif;
+    color: white;
+  }
+
+  .card {
+    background: #222;
+    padding: 30px;
+    border-radius: 12px;
+    width: 320px;
+    text-align: center;
+  }
+
+  input, button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 6px;
+    border: none;
+    font-size: 16px;
+  }
+
+  button {
+    background: #00aaff;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+  }
+
+  #msg {
+    margin-top: 15px;
+    color: yellow;
+    font-weight: bold;
+    min-height: 24px;
+  }
+</style>
 </head>
+
 <body>
 
-<button onclick="test()">CLICK ME</button>
-<div id="msg"></div>
+<div class="card">
+  <h2>Zyrx Demo Form</h2>
 
-<script>
-  function test() {
-    document.getElementById("msg").innerText = "YELLOW MESSAGE WORKS ✅";
-  }
+  <input id="name" type="text" placeholder="Enter Name">
+  <input id="mobile" type="tel" placeholder="Enter Mobile Number">
+
+  <button id="submitBtn">Submit</button>
+
+  <div id="msg"></div>
+</div>
+
+<!-- Firebase -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
+  import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
+
+  // 🔥 Your Firebase config
+  const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "zyrx-f5937.firebaseapp.com",
+    projectId: "zyrx-f5937",
+    storageBucket: "zyrx-f5937.appspot.com",
+    messagingSenderId: "849122075018",
+    appId: "YOUR_APP_ID"
+  };
+
+  // Init Firebase
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  const msg = document.getElementById("msg");
+  const btn = document.getElementById("submitBtn");
+
+  btn.addEventListener("click", async () => {
+    const name = document.getElementById("name").value.trim();
+    const mobile = document.getElementById("mobile").value.trim();
+
+    if (!name || !mobile) {
+      msg.textContent = "Fill all fields!";
+      return;
+    }
+
+    try {
+      await addDoc(collection(db, "users"), {
+        name: name,
+        mobile: mobile,
+        createdAt: serverTimestamp()
+      });
+
+      msg.textContent = "Data saved online ✅";
+      document.getElementById("name").value = "";
+      document.getElementById("mobile").value = "";
+
+    } catch (e) {
+      console.error(e);
+      msg.textContent = "Error saving data ❌";
+    }
+  });
 </script>
 
 </body>
 </html>
+
 
 
