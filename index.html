@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Zyrx Demo Form</title>
+
 <style>
   body {
     margin: 0;
@@ -23,17 +24,12 @@
     text-align: center;
   }
 
-  .card h2 {
-    margin-bottom: 20px;
-  }
-
   input, button {
     width: 100%;
     padding: 10px;
     margin-top: 10px;
     border-radius: 6px;
     border: none;
-    font-size: 16px;
   }
 
   button {
@@ -47,69 +43,65 @@
     margin-top: 15px;
     color: yellow;
     font-weight: bold;
-    min-height: 24px;
-    text-align: center;
+    min-height: 20px;
   }
 </style>
 </head>
+
 <body>
 
 <div class="card">
   <h2>Zyrx Demo Form</h2>
-  <input type="text" id="name" placeholder="Enter Name">
-  <input type="tel" id="mobile" placeholder="Enter Mobile No">
-  <button id="submitBtn">Submit</button>
+  <input id="name" placeholder="Enter Name">
+  <input id="mobile" placeholder="Enter Mobile No">
+  <button onclick="saveData()">Submit</button>
   <div id="msg"></div>
 </div>
 
-<!-- Firebase CDN -->
-<script src="https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js"></script>
+<!-- Firebase CDN (NO module) -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
 <script>
-  // 🔹 Firebase config
   const firebaseConfig = {
-    apiKey: "AIzaSyBisqR3m4trFx-and45aUP3Z01UHF4ZNCk",
+    apiKey: "AIzaSyApiwDJT-MLieGEpM6v4ipx2wcPLf8Gg_Q",
     authDomain: "zyrx-f5937.firebaseapp.com",
     projectId: "zyrx-f5937",
     storageBucket: "zyrx-f5937.firebasestorage.app",
     messagingSenderId: "849122075018",
-    appId: "1:849122075018:web:b6b4d0a2c4915b25d76873",
-    measurementId: "G-KWFZGKP7HD"
+    appId: "1:849122075018:web:ab72c5a67c983a92d76873"
   };
 
-  // Initialize Firebase
-  const app = firebase.initializeApp(firebaseConfig);
+  firebase.initializeApp(firebaseConfig);
   const db = firebase.firestore();
 
-  const msgDiv = document.getElementById("msg");
-  const nameInput = document.getElementById("name");
-  const mobileInput = document.getElementById("mobile");
-  const submitBtn = document.getElementById("submitBtn");
-
-  submitBtn.addEventListener("click", async () => {
-    const name = nameInput.value.trim();
-    const mobile = mobileInput.value.trim();
+  function saveData() {
+    const name = document.getElementById("name").value.trim();
+    const mobile = document.getElementById("mobile").value.trim();
+    const msg = document.getElementById("msg");
 
     if (!name || !mobile) {
-      msgDiv.textContent = "Fill all fields!";
+      msg.innerText = "Fill all fields!";
       return;
     }
 
-    try {
-      await db.collection("users").add({
-        name,
-        mobile,
-        time: firebase.firestore.FieldValue.serverTimestamp()
-      });
-      msgDiv.textContent = "Data saved online ✅"; // ✅ Yellow message
-      nameInput.value = "";
-      mobileInput.value = "";
-    } catch (error) {
-      console.error(error);
-      msgDiv.textContent = "Error saving data ❌";
-    }
-  });
+    db.collection("users").add({
+      name: name,
+      mobile: mobile,
+      time: firebase.firestore.FieldValue.serverTimestamp()
+    })
+    .then(() => {
+      msg.innerText = "Data saved online ✅";
+      document.getElementById("name").value = "";
+      document.getElementById("mobile").value = "";
+    })
+    .catch((err) => {
+      console.error(err);
+      msg.innerText = "Error saving data ❌";
+    });
+  }
 </script>
 
 </body>
 </html>
+
